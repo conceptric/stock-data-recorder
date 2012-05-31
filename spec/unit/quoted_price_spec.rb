@@ -16,14 +16,14 @@ end
 
 describe QuotedPrice do              
   let(:price_date) { DateTime.new(2012,05,31) }
-  let(:ask_price) { 110.0 }
-  let(:bid_price) { 110.0 }
+  let(:ask_price) { 100.0 }
+  let(:bid_price) { 100.0 }
   
   subject do
     QuotedPrice.new(price_date, ask_price, bid_price)
   end            
   
-  it "has a date attribute" do
+  it "has the date the prices were quoted" do
     subject.date.should be_instance_of DateTime
   end            
   
@@ -31,6 +31,9 @@ describe QuotedPrice do
     subject.date.should == price_date
   end
 
+  it "returns the currency in which the prices are quoted"
+  it "belongs to a quoted security identified by ticker"
+  
   shared_examples "a set of quoted prices" do 
     it "include the bid price" do
       subject.bid.should == bid_price
