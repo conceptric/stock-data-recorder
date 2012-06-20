@@ -17,7 +17,7 @@ http_interactions:
       message: OK
     headers:
       X-Yql-Host:
-      - engine3.yql.ird.yahoo.com
+      - engine5.yql.ird.yahoo.com
       Access-Control-Allow-Origin:
       - ! '*'
       Cache-Control:
@@ -27,7 +27,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       Date:
-      - Tue, 19 Jun 2012 18:05:15 GMT
+      - Wed, 20 Jun 2012 12:30:20 GMT
       Server:
       - YTS/1.20.10
       Age:
@@ -38,48 +38,7 @@ http_interactions:
       - keep-alive
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"count":1,"created":"2012-06-19T18:05:16Z","lang":"en-US","results":{"quote":{"symbol":"BP.L","Bid":"426.85","Ask":"426.95"}}}}'
+      string: ! '{"query":{"count":1,"created":"2012-06-20T12:30:21Z","lang":"en-US","results":{"quote":{"symbol":"BP.L","Bid":"425.25","Ask":"425.30"}}}}'
     http_version: 
-  recorded_at: Tue, 19 Jun 2012 18:05:15 GMT
-- request:
-    method: get
-    uri: http://query.yahooapis.com/v1/public/yql?env=store://datatables.org/alltableswithkeys&format=json&q=select%20symbol,%20Ask,%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22BP.L%22)
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - ! '*/*'
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      X-Yql-Host:
-      - engine1.yql.ird.yahoo.com
-      Access-Control-Allow-Origin:
-      - ! '*'
-      Cache-Control:
-      - no-cache
-      Content-Type:
-      - application/json;charset=utf-8
-      Vary:
-      - Accept-Encoding
-      Date:
-      - Tue, 19 Jun 2012 18:05:15 GMT
-      Server:
-      - YTS/1.20.10
-      Age:
-      - '1'
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-    body:
-      encoding: US-ASCII
-      string: ! '{"query":{"count":1,"created":"2012-06-19T18:05:16Z","lang":"en-US","results":{"quote":{"symbol":"BP.L","Bid":"426.85","Ask":"426.95"}}}}'
-    http_version: 
-  recorded_at: Tue, 19 Jun 2012 18:05:16 GMT
+  recorded_at: Wed, 20 Jun 2012 12:30:21 GMT
 recorded_with: VCR 2.2.2

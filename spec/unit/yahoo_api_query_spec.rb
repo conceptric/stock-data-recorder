@@ -4,7 +4,7 @@ require 'json'
 class YahooApiQuery                       
   attr_reader :response
   def initialize(ticker)                                   
-          uri = URI("http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20Ask%2C%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22#{ticker}%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")  
+    uri = URI(build_query_uri(ticker))  
     @response = Net::HTTP.get_response(uri)
   end  
 
@@ -15,21 +15,24 @@ class YahooApiQuery
   def data
     JSON.parse(@response.body)['query']['results']        
   end
+
+  private
+  
+  def build_query_uri(ticker)    "http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20Ask%2C%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22#{ticker}%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+  end
 end
 
 describe "Yahoo API Query" do
-  
-  use_vcr_cassette "single_stock_query", :record => :new_episodes
+    
+  context "of an valid single asset" do
 
-  let(:ticker) { "BP.L" }
-  
-  subject { YahooApiQuery.new(ticker) }
-  
-  it "creates a new Yahoo API query" do
-    subject.should be_true
-  end
+    use_vcr_cassette "single_stock_query", :record => :new_episodes
+    let(:ticker) { "BP.L" }  
+    subject { YahooApiQuery.new(ticker) }  
 
-  context "with a successful single asset query" do
+    it "creates a new Yahoo API query" do
+      subject.should be_true
+    end
 
     it "returns a HTTP success response" do
       subject.response.should be_kind_of Net::HTTPSuccess
