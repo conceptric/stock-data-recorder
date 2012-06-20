@@ -18,7 +18,12 @@ class YahooApiQuery
 
   private
   
-  def build_query_uri(ticker)    "http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20Ask%2C%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22#{ticker}%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+  def build_query_uri(ticker)                                      
+    datatable = "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+    base_query =  "http://query.yahooapis.com/v1/public/yql?" +  
+        "q=select symbol, Ask, Bid from yahoo.finance.quotes " + 
+        "where symbol in (\"#{ticker}\")&format=json"
+    query = URI.encode(base_query) + datatable
   end
 end
 
