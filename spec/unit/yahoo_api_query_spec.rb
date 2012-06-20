@@ -3,7 +3,8 @@ require 'json'
 
 class YahooApiQuery                       
   attr_reader :response
-  def initialize(uri)
+  def initialize(ticker)                                   
+          uri = URI("http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20Ask%2C%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22#{ticker}%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")  
     @response = Net::HTTP.get_response(uri)
   end  
 
@@ -19,11 +20,10 @@ end
 describe "Yahoo API Query" do
   
   use_vcr_cassette "single_stock_query", :record => :new_episodes
-  
-  let(:target) { 
-URI('http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20Ask%2C%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22BP.L%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys')  }  
 
-  subject { YahooApiQuery.new(target) }
+  let(:ticker) { "BP.L" }
+  
+  subject { YahooApiQuery.new(ticker) }
   
   it "creates a new Yahoo API query" do
     subject.should be_true
