@@ -13,8 +13,12 @@ class YahooApiQuery
     JSON.parse(@response.body)['query']['count']    
   end
 
-  def data
-    JSON.parse(@response.body)['query']['results']        
+  def quotes                                               
+    quote_data = JSON.parse(@response.body)['query']['results']['quote']        
+    quote_data = [quote_data] if count == 1
+    quote_data.each do |quote|
+      quote['quoted_at']= JSON.parse(@response.body)['query']['created']
+    end      
   end
 
   private
@@ -53,10 +57,17 @@ describe "Yahoo API Query" do
       subject.count.should == 1
     end
 
-    it "returns a Hash of results with a single quote item" do
-      subject.data.should be_instance_of Hash
-      subject.data.size.should == 1
-      subject.data.should include 'quote'
+    it "returns an array of quotes containing a single item" do
+      subject.quotes.should be_instance_of Array
+      subject.quotes.size.should == 1
+      subject.quotes.first['symbol'].should == 'BP.L'
+    end
+
+    it "the quote contains the correct data" do
+      subject.quotes.first.should include 'quoted_at'
+      subject.quotes.first.should include 'symbol'
+      subject.quotes.first.should include 'Ask'
+      subject.quotes.first.should include 'Bid'
     end
     
   end
@@ -78,7 +89,14 @@ describe "Yahoo API Query" do
     it "contains two results" do
       subject.count.should == 2
     end
-
+    
+    it "returns an array of quotes containing two items" do
+      subject.quotes.should be_instance_of Array
+      subject.quotes.size.should == 2
+      subject.quotes.first['symbol'].should == 'BP.L'
+      subject.quotes.last['symbol'].should == 'BLT.L'
+    end
+    
   end
   
 end
