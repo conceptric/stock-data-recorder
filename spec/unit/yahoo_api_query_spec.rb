@@ -1,32 +1,50 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'json'
 
+class YahooApiQuery                       
+  attr_reader :response
+  def initialize(uri)
+    @response = Net::HTTP.get_response(uri)
+  end  
+
+  def count
+    JSON.parse(@response.body)['query']['count']    
+  end
+
+  def data
+    JSON.parse(@response.body)['query']['results']        
+  end
+end
+
 describe "Yahoo API Query" do
   
   use_vcr_cassette "single_stock_query", :record => :new_episodes
-  let(:target_uri) { 
+  
+  let(:target) { 
 URI('http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20Ask%2C%20Bid%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22BP.L%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys')  }  
 
-  before(:each) do  
-    response = Net::HTTP.get_response(target_uri)
-    @result = JSON.parse(response.body)
-  end       
+  subject { YahooApiQuery.new(target) }
   
-  it "gets an HTTP response" do
-    Net::HTTP.get_response(target_uri).should be_instance_of Net::HTTPOK
+  it "creates a new Yahoo API query" do
+    subject.should be_true
   end
 
-  it "returns the result of the query as JSON" do     
-    @result.should be_instance_of Hash
-    @result['query'].should be_true
-  end
+  context "with a successful single asset query" do
 
-  it "contains a single result" do
-    @result['query']['count'] == 1
-  end
+    it "returns a HTTP success response" do
+      subject.response.should be_kind_of Net::HTTPSuccess
+    end
 
-  it "the result is in a Hash of results" do
-    @result['query']['results'].should be_instance_of Hash    
+    it "contains a single result" do
+      subject.count.should == 1
+    end
+
+    it "returns a Hash of results with a single quote item" do
+      subject.data.should be_instance_of Hash
+      subject.data.size.should == 1
+      subject.data.should include 'quote'
+    end
+    
   end
   
 end
