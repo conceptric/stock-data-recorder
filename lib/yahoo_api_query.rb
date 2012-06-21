@@ -1,9 +1,11 @@
 require 'json'
 
 module YahooApiQuery
-
+  API_QUERY_URL = "http://query.yahooapis.com/v1/public/yql?q="
+  
   module Finance
-
+    FINANCE_DATABASE = "yahoo.finance.quotes"
+    
     class Query                       
       attr_reader :response
       def initialize(tickers)
@@ -27,10 +29,11 @@ module YahooApiQuery
       private
 
       def build_query_uri(tickers)                                      
+        data_to_select = "select symbol, Ask, Bid from "
+        for_these_symbols = " where symbol in (#{parse_tickers})"
         datatable = "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
-        base_query =  "http://query.yahooapis.com/v1/public/yql?" +  
-            "q=select symbol, Ask, Bid from yahoo.finance.quotes " + 
-            "where symbol in (#{parse_tickers})&format=json"
+        base_query =  API_QUERY_URL + data_to_select + FINANCE_DATABASE + 
+            for_these_symbols + "&format=json"
         query = URI.encode(base_query) + datatable
       end     
 
