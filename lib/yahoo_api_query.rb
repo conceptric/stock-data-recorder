@@ -30,15 +30,17 @@ module YahooApiQuery
       private
 
       def build_query_uri
-        select_data_from = "select symbol, Ask, Bid from "
-        for_these_symbols = " where symbol in (#{parse_tickers})"
         base_query =  API_QUERY_URL + select_data_from + FINANCE_DATABASE + 
             for_these_symbols
         query = URI.encode(base_query) + "&format=json" + DATATABLE
       end     
 
-      def parse_tickers
-        "\"#{@tickers.join("\", \"")}\""    
+      def for_these_symbols
+        " where symbol in (\"#{@tickers.join("\", \"")}\")"    
+      end
+      
+      def select_data_from
+        "select symbol, Ask, Bid from "        
       end
     end
 
