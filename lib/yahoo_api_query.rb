@@ -11,8 +11,7 @@ module YahooApiQuery
       attr_reader :response
       def initialize(tickers)
         @tickers = tickers                                   
-        uri = URI(build_query_uri)  
-        @response = Net::HTTP.get_response(uri)
+        @response = Net::HTTP.get_response(URI(build_query_uri))
       end  
 
       def count
