@@ -5,12 +5,13 @@ module YahooApiQuery
   
   module Finance
     FINANCE_DATABASE = "yahoo.finance.quotes"
+    DATATABLE = "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
     
     class Query                       
       attr_reader :response
       def initialize(tickers)
         @tickers = tickers                                   
-        uri = URI(build_query_uri(tickers))  
+        uri = URI(build_query_uri)  
         @response = Net::HTTP.get_response(uri)
       end  
 
@@ -28,13 +29,12 @@ module YahooApiQuery
 
       private
 
-      def build_query_uri(tickers)                                      
-        data_to_select = "select symbol, Ask, Bid from "
+      def build_query_uri
+        select_data_from = "select symbol, Ask, Bid from "
         for_these_symbols = " where symbol in (#{parse_tickers})"
-        datatable = "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
-        base_query =  API_QUERY_URL + data_to_select + FINANCE_DATABASE + 
-            for_these_symbols + "&format=json"
-        query = URI.encode(base_query) + datatable
+        base_query =  API_QUERY_URL + select_data_from + FINANCE_DATABASE + 
+            for_these_symbols
+        query = URI.encode(base_query) + "&format=json" + DATATABLE
       end     
 
       def parse_tickers
