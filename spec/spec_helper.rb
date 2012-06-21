@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), *%w[.. lib stock-data-recorder.rb])
+require File.join(File.dirname(__FILE__), *%w[.. lib yahoo_api_query.rb])
 require 'vcr'
 
 VCR.configure do |c|
