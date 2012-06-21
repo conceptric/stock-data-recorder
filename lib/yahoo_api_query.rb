@@ -6,12 +6,34 @@ module YahooApiQuery
   module Finance
     FINANCE_DATABASE = "yahoo.finance.quotes"
     DATATABLE = "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+
+    class QueryURI                 
+      def self.build(tickers)
+        URI(build_query_uri(tickers))
+      end        
+
+      private
+      
+      def self.build_query_uri(tickers)
+        base_query =  API_QUERY_URL + select_data_from + FINANCE_DATABASE + 
+            for_these_symbols(tickers)
+        query = URI.encode(base_query) + "&format=json" + DATATABLE
+      end     
+
+      def self.for_these_symbols(tickers)
+        " where symbol in (\"#{tickers.join("\", \"")}\")"    
+      end
+      
+      def self.select_data_from
+        "select symbol, Ask, Bid from "        
+      end  
+    end
     
     class Query                       
       attr_reader :response
       def initialize(tickers)
         @tickers = tickers                                   
-        @response = Net::HTTP.get_response(URI(build_query_uri))
+        @response = Net::HTTP.get_response(QueryURI.build(tickers))
       end  
 
       def count
@@ -24,20 +46,6 @@ module YahooApiQuery
 
       private
 
-      def build_query_uri
-        base_query =  API_QUERY_URL + select_data_from + FINANCE_DATABASE + 
-            for_these_symbols
-        query = URI.encode(base_query) + "&format=json" + DATATABLE
-      end     
-
-      def for_these_symbols
-        " where symbol in (\"#{@tickers.join("\", \"")}\")"    
-      end
-      
-      def select_data_from
-        "select symbol, Ask, Bid from "        
-      end  
-      
       def get_quotes_as_array 
         quote_data = parse_query_json['results']['quote']
         quote_data = [quote_data] unless quote_data.class == Array                
