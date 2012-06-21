@@ -15,15 +15,11 @@ module YahooApiQuery
       end  
 
       def count
-        JSON.parse(@response.body)['query']['count']    
+        get_query_json['count']    
       end
 
       def quotes                                               
-        quote_data = JSON.parse(@response.body)['query']['results']['quote']        
-        quote_data = [quote_data] if count == 1
-        quote_data.each do |quote|
-          quote['quoted_at']= JSON.parse(@response.body)['query']['created']
-        end      
+        add_datetime_to_quotes
       end
 
       private
@@ -40,6 +36,22 @@ module YahooApiQuery
       
       def select_data_from
         "select symbol, Ask, Bid from "        
+      end  
+      
+      def get_quotes_as_array 
+        quote_data = get_query_json['results']['quote']
+        quote_data = [quote_data] if count == 1                
+        quote_data
+      end     
+      
+      def add_datetime_to_quotes
+        get_quotes_as_array.each do |quote|
+          quote['quoted_at']= get_query_json['created']
+        end              
+      end 
+      
+      def get_query_json
+        JSON.parse(@response.body)['query']
       end
     end
 
