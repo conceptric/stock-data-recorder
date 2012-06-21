@@ -15,7 +15,7 @@ module YahooApiQuery
       end  
 
       def count
-        get_query_json['count']    
+        parse_query_json['count']    
       end
 
       def quotes                                               
@@ -39,18 +39,18 @@ module YahooApiQuery
       end  
       
       def get_quotes_as_array 
-        quote_data = get_query_json['results']['quote']
-        quote_data = [quote_data] if count == 1                
+        quote_data = parse_query_json['results']['quote']
+        quote_data = [quote_data] unless quote_data.class == Array                
         quote_data
       end     
       
       def add_datetime_to_quotes
         get_quotes_as_array.each do |quote|
-          quote['quoted_at']= get_query_json['created']
+          quote['quoted_at']= parse_query_json['created']
         end              
       end 
       
-      def get_query_json
+      def parse_query_json
         JSON.parse(@response.body)['query']
       end
     end
