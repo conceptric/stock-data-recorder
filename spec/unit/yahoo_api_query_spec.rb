@@ -5,7 +5,7 @@ describe "Yahoo API Query" do
   context "of a valid single asset" do
     use_vcr_cassette "single_stock_query", :record => :new_episodes
     let(:ticker) { ["BP.L"] }  
-    subject { YahooApiQuery::FinanceQuote.new(ticker) }  
+    subject { YahooApiQuery::Finance::Query.new(ticker) }  
 
     it "creates a new Yahoo API query" do
       subject.should be_true
@@ -36,7 +36,7 @@ describe "Yahoo API Query" do
   context "of two valid assets" do
     use_vcr_cassette "multi_stock_query", :record => :new_episodes
     let(:ticker) { ["BP.L", "BLT.L"] }  
-    subject { YahooApiQuery::FinanceQuote.new(ticker) }  
+    subject { YahooApiQuery::Finance::Query.new(ticker) }  
 
     it "creates a new Yahoo API query" do
       subject.should be_true
