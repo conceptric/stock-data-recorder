@@ -12,49 +12,39 @@ describe YahooApiQuery::Finance::Query do
       subject.response.should be_kind_of Net::HTTPSuccess
     end
 
-    it "contains a single result" do
+    it "reports #{tickers.size} results" do
       subject.count.should == tickers.size
     end
 
-    it "returns an array of quotes containing a single item" do
+    it "returns an array of #{tickers.size} quotes" do
       subject.quotes.should be_instance_of Array
       subject.quotes.size.should == tickers.size
-      subject.quotes.first['symbol'].should == tickers.first
     end
 
-    it "the quote contains the correct data" do
-      subject.quotes.first.should include 'quoted_at'
-      subject.quotes.first.should include 'symbol'
-      subject.quotes.first.should include 'Ask'
-      subject.quotes.first.should include 'Bid'
+    it "the quotes contain the requested data" do
+      subject.quotes.each do |quote|
+        quote.should include 'quoted_at'
+        quote.should include 'symbol'
+        quote.should include 'Ask'
+        quote.should include 'Bid'        
+      end
     end        
   end
   
   context "of a valid single asset" do
     use_vcr_cassette "single_stock_query", :record => :new_episodes  
     include_examples "successful queries", ["BP.L"]
+
+    it "the quote is for the requested ticker" do
+      subject.quotes.first['symbol'].should == 'BP.L'
+    end    
   end
 
   context "of two valid assets" do
     use_vcr_cassette "multi_stock_query", :record => :new_episodes
-    let(:ticker) { ["BP.L", "BLT.L"] }  
-    subject { YahooApiQuery::Finance::Query.new(ticker) }  
+    include_examples "successful queries", ["BP.L", "BLT.L"]
 
-    it "creates a new Yahoo API query" do
-      subject.should be_true
-    end
-
-    it "returns a HTTP success response" do
-      subject.response.should be_kind_of Net::HTTPSuccess
-    end
-
-    it "contains two results" do
-      subject.count.should == 2
-    end
-
-    it "returns an array of quotes containing two items" do
-      subject.quotes.should be_instance_of Array
-      subject.quotes.size.should == 2
+    it "the quotes are for the requested tickers" do
       subject.quotes.first['symbol'].should == 'BP.L'
       subject.quotes.last['symbol'].should == 'BLT.L'
     end    
