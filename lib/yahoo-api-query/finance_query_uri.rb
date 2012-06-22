@@ -7,6 +7,9 @@ module YahooApiQuery
 
     class QueryURI                 
       def self.build(tickers)
+        if tickers == nil || tickers.empty? then
+          raise ArgumentError, "At least one ticker must be supplied"
+        end
         URI(build_query_uri(tickers))
       end        
 
