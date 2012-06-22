@@ -16,7 +16,7 @@ module YahooApiQuery
       def self.validate_tickers(tickers)
         if tickers.class != Array
           raise ArgumentError, "Tickers must be supplied in an Array"
-        elsif tickers.empty?
+        elsif tickers.empty? || tickers.include?("")
           raise ArgumentError, "At least one ticker must be supplied"
         end        
       end

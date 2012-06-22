@@ -51,5 +51,10 @@ describe YahooApiQuery::Finance::QueryURI do
       expect {YahooApiQuery::Finance::QueryURI.build([])}. 
         to raise_error(ArgumentError, "At least one ticker must be supplied")
     end
+    
+    it "raises an exception with an array of blank tickers" do
+      expect {YahooApiQuery::Finance::QueryURI.build(["",""])}. 
+        to raise_error(ArgumentError, "At least one ticker must be supplied")
+    end
   end
 end
