@@ -21,12 +21,27 @@ describe YahooApiQuery::Finance::Query do
       subject.quotes.size.should == tickers.size
     end
 
-    it "the quotes contain the requested data" do
+    it "wraps each quote in a Hash" do
       subject.quotes.each do |quote|
-        quote.should include 'quoted_at'
-        quote.should include 'symbol'
-        quote.should include 'Ask'
-        quote.should include 'Bid'        
+        quote.should be_instance_of Hash
+      end
+    end
+
+    it "each quote contain the requested data" do
+      subject.quotes.each do |quote|
+        quote.has_key?('quoted_at').should be_true
+        quote.has_key?('symbol').should be_true
+        quote.has_key?('Ask').should be_true
+        quote.has_key?('Bid').should be_true        
+      end
+    end        
+
+    it "none of the requested data is empty" do
+      subject.quotes.each do |quote|
+        quote['quoted_at'].should_not == ""
+        quote['symbol'].should_not == ""
+        quote['Ask'].should_not == ""
+        quote['Bid'].should_not == ""        
       end
     end        
   end
