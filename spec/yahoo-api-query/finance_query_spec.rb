@@ -48,5 +48,19 @@ describe YahooApiQuery::Finance::Query do
       subject.quotes.first['symbol'].should == 'BP.L'
       subject.quotes.last['symbol'].should == 'BLT.L'
     end    
+  end
+end
+
+describe "Integration between the Query and URL" do
+  context "of a query with no assets" do
+    it "raises an exception with no ticker array" do
+      expect {YahooApiQuery::Finance::Query.new()}.
+        to raise_error(ArgumentError, "wrong number of arguments (0 for 1)")
+    end
+
+    it "raises an exception with an empty ticker array" do
+      expect {YahooApiQuery::Finance::Query.new([])}. 
+        to raise_error(ArgumentError, "At least one ticker must be supplied")
+    end
   end      
 end
