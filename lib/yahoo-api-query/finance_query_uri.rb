@@ -7,15 +7,19 @@ module YahooApiQuery
 
     class QueryURI                 
       def self.build(tickers)
-        if tickers.class != Array
-          raise ArgumentError, "Tickers must be supplied in an Array"
-        elsif tickers.empty? then
-          raise ArgumentError, "At least one ticker must be supplied"
-        end
+        validate_tickers(tickers)
         URI(build_query_uri(tickers))
       end        
 
-      private
+      private  
+      
+      def self.validate_tickers(tickers)
+        if tickers.class != Array
+          raise ArgumentError, "Tickers must be supplied in an Array"
+        elsif tickers.empty?
+          raise ArgumentError, "At least one ticker must be supplied"
+        end        
+      end
       
       def self.build_query_uri(tickers)
         base_query =  API_QUERY_URL + select_data_from + FINANCE_DATABASE + 
