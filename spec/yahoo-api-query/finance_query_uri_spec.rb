@@ -22,22 +22,34 @@ describe YahooApiQuery::Finance::QueryURI do
     subject { YahooApiQuery::Finance::QueryURI.build(["BP.L"]) }   
     include_examples "valid finance URI", '%22BP.L%22'
   end  
-  
+
   context "with three tickers provided" do
     subject { YahooApiQuery::Finance::QueryURI.build(["BP.L","BLT.L","GSK.L"]) }
     include_examples "valid finance URI", 
       '%22BP.L%22,%20%22BLT.L%22,%20%22GSK.L%22'
   end                                 
   
-  context "without any tickers provided" do
+  context "with invalid tickers provided" do
+    it "raises an exception with no ticker array" do
+      expect {YahooApiQuery::Finance::QueryURI.build()}.
+        to raise_error(ArgumentError, "wrong number of arguments (0 for 1)")
+    end
+    
+    shared_examples "invalid ticker data type" do |data_type|
+      it "raises an exception when a #{data_type.class} is provided" do
+        expect {YahooApiQuery::Finance::QueryURI.build(data_type)}.
+          to raise_error(ArgumentError, "Tickers must be supplied in an Array")
+      end      
+    end          
+
+    include_examples "invalid ticker data type", "BP.L"
+    include_examples "invalid ticker data type", 1
+    include_examples "invalid ticker data type", {}
+    include_examples "invalid ticker data type", {ticker:"BP.L"}    
+
     it "raises an exception with an empty ticker array" do
       expect {YahooApiQuery::Finance::QueryURI.build([])}. 
         to raise_error(ArgumentError, "At least one ticker must be supplied")
-    end
-
-    it "raises an exception with not ticker array" do
-      expect {YahooApiQuery::Finance::QueryURI.build()}.
-        to raise_error(ArgumentError, "wrong number of arguments (0 for 1)")
     end
   end
 end
