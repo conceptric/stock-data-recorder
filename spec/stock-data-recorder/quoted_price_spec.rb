@@ -1,26 +1,30 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class QuotedPrice
-  attr_reader :date, :bid, :ask
+module Stock
+  module Data
+    class QuotedPrice
+      attr_reader :date, :bid, :ask
 
-  def initialize(date, ask, bid)
-    @date = date
-    @bid = bid
-    @ask = ask
-  end
-  
-  def spread
-    ask - bid
-  end
+      def initialize(date, ask, bid)
+        @date = date
+        @bid = bid
+        @ask = ask
+      end
+
+      def spread
+        ask - bid
+      end
+    end    
+  end  
 end
 
-describe QuotedPrice do              
+describe Stock::Data::QuotedPrice do              
   let(:price_date) { DateTime.new(2012,05,31) }
   let(:ask_price) { 100.0 }
   let(:bid_price) { 100.0 }
   
   subject do
-    QuotedPrice.new(price_date, ask_price, bid_price)
+    Stock::Data::QuotedPrice.new(price_date, ask_price, bid_price)
   end            
   
   it "has the date the prices were quoted" do
