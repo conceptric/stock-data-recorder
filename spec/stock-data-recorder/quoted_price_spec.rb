@@ -3,12 +3,18 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 module Stock
   module Data
     class QuotedPrice
+      include Comparable
+      
       attr_reader :date, :bid, :ask
 
       def initialize(date, ask, bid)
         @date = date
         @bid = bid
         @ask = ask
+      end
+      
+      def <=>(another)
+        date <=> another.date
       end
 
       def spread
@@ -59,5 +65,32 @@ describe Stock::Data::QuotedPrice do
   context "with different prices" do
     let(:bid_price) { 100.0 }
     it_behaves_like "a set of quoted prices"
+  end
+  
+  describe ".comparable" do
+                                     
+    let(:past) { Stock::Data::QuotedPrice.new(DateTime.new(2012,01,01),
+                          ask_price, bid_price) } 
+    let(:recent) { Stock::Data::QuotedPrice.new(
+      DateTime.new(2012,06,01), ask_price, bid_price) }
+        
+    it "can tell when two prices are of the same date" do
+      same = Stock::Data::QuotedPrice.new(price_date, ask_price, bid_price)
+      subject.should == same
+    end
+    
+    it "can tell when one price is newer than another" do      
+      subject.should > past
+    end                                         
+    
+    it "can tell when one price is older than another" do
+      subject.should < recent      
+    end
+    
+    it "can be sorted from oldest to most recent" do
+      unsorted = [recent, past]
+      unsorted.sort.should == [past, recent]
+    end
+    
   end
 end
