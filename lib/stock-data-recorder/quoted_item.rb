@@ -11,10 +11,12 @@ module Stock
       private
 
       def validate_ticker(ticker)
-        unless ticker.class == String
-          raise ArgumentError, "Ticker must be a valid string", caller
-        end
-        raise ArgumentError, "Ticker cannot be blank", caller if ticker == "" 
+        raise ArgumentError, "Ticker must be a valid string", 
+          caller unless ticker.class == String        
+        raise ArgumentError, "You must provide a ticker", 
+          caller if ticker !~ /^[a-zA-Z]+/
+        raise ArgumentError, "You must provide a market ID", 
+          caller if ticker !~ /\.[a-zA-Z]+$/
       end  
     end         
   end  

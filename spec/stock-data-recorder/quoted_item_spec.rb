@@ -2,8 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Stock::Data::QuotedItem do
   context "when created with valid attributes" do
+    
     subject do
-      Stock::Data::QuotedItem.new("TEST.L")
+      Stock::Data::QuotedItem.new("BP.L")
     end
   
     it "creates an instance" do      
@@ -11,22 +12,19 @@ describe Stock::Data::QuotedItem do
     end                    
 
     it "has a ticker" do
-      subject.ticker.should == "TEST.L"
+      subject.ticker.should == "BP.L"
     end                          
+  
   end
   
   context "when created with invalid attributes" do
-    it "raises an ArgumentError when there are no attributes" do      
-      expect {Stock::Data::QuotedItem.new()}.to raise_error ArgumentError
-    end                    
     
     describe "raises an ArgumentError with invalid ticker types" do
-      def invalid_ticker_helper(ticker_type, message)
-        expect {Stock::Data::QuotedItem.new(ticker_type)}.
-        to raise_error ArgumentError, 
-          message        
+      
+      it "like a missing argument" do
+        expect {Stock::Data::QuotedItem.new()}.to raise_error ArgumentError
       end
-
+      
       it "like nil" do      
         invalid_ticker_helper(nil, "Ticker must be a valid string")
       end                    
@@ -34,10 +32,25 @@ describe Stock::Data::QuotedItem do
       it "like an integer" do      
         invalid_ticker_helper(10, "Ticker must be a valid string")
       end                          
+
+      it "like a boolean" do      
+        invalid_ticker_helper(true, "Ticker must be a valid string")
+      end                          
     
       it "like a blank string" do      
-        invalid_ticker_helper("", "Ticker cannot be blank")
+        invalid_ticker_helper("", "You must provide a ticker")
       end                        
+
+      it "like a market string without a ticker" do      
+        invalid_ticker_helper(".L", "You must provide a ticker")
+      end                        
+    
+      it "like a ticker without a market string" do      
+        invalid_ticker_helper("BP", "You must provide a market ID")
+      end                        
+
     end    
+
   end
+
 end
