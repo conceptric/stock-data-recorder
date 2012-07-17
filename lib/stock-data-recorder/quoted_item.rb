@@ -1,11 +1,20 @@
 module Stock
   module Data
     class QuotedItem    
-      attr_reader :ticker
+      attr_reader :ticker, :prices
 
       def initialize(ticker) 
         validate_ticker(ticker)
-        @ticker = ticker
+        @ticker = ticker    
+        @prices = []
+      end
+
+      def add_price(price_data)
+        @prices << QuotedPrice.new(
+                    price_data[:date], 
+                    price_data[:ask],
+                    price_data[:bid])
+        @prices = @prices.sort.reverse
       end
 
       private

@@ -1,15 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Stock::Data::QuotedItem do 
+
+  subject { Stock::Data::QuotedItem.new("BP.L") }
   
   describe ".new instance of QuotedItem" do
     
     context "when created with valid attributes" do
-    
-      subject do
-        Stock::Data::QuotedItem.new("BP.L")
-      end
-  
+      
       it "creates an instance" do      
         subject.should be_instance_of Stock::Data::QuotedItem
       end                    
@@ -54,4 +52,59 @@ describe Stock::Data::QuotedItem do
    
   end
   
+  describe ".add_price" do
+    
+    let(:oldest)  { DateTime.new(2012,01,1) }
+    let(:old)     { DateTime.new(2012,04,1) }
+    let(:new)     { DateTime.new(2012,06,1) }
+    let(:oldest_price)  { { date:oldest, bid:1, ask:2 } }
+    let(:old_price)     { { date:old, bid:1, ask:2 } }
+    let(:new_price)     { { date:new, bid:1, ask:2 } }
+    
+    context "with an empty price list" do
+
+      it "has no prices" do
+        subject.prices.size.should == 0
+      end                       
+    
+      it "adds price data based on a hash" do  
+        subject.add_price(old_price)
+        subject.prices.size.should == 1
+        price = subject.prices.first        
+        price.bid == 1
+        price.ask == 2
+      end
+
+      it "the price can tell me the spread" do              
+        subject.add_price(old_price)
+        price = subject.prices.first
+        price.spread == 1
+      end
+
+    end
+    
+    context "with an existing entry in the price list" do
+      
+      before(:each) do
+        subject.add_price(old_price)
+      end
+      
+      it "has a single price" do
+        subject.prices.size.should == 1                    
+      end                                                            
+      
+      it "adds a second price" do
+        subject.add_price(old_price)
+        subject.prices.size.should == 2
+      end                                     
+      
+      it "the most recent prices are first" do       
+        subject.add_price(new_price)
+        subject.prices.first.date.should be > subject.prices.last.date
+      end
+   
+    end           
+
+  end
+
 end
