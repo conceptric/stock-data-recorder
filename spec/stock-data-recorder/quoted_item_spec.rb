@@ -57,9 +57,9 @@ describe Stock::Data::QuotedItem do
     let(:oldest)  { DateTime.new(2012,01,1) }
     let(:old)     { DateTime.new(2012,04,1) }
     let(:new)     { DateTime.new(2012,06,1) }
-    let(:oldest_price)  { { date:oldest, bid:1, ask:2 } }
-    let(:old_price)     { { date:old, bid:1, ask:2 } }
-    let(:new_price)     { { date:new, bid:1, ask:2 } }
+    let(:oldest_price)  { { date:oldest , bid:1, ask:2 } }
+    let(:old_price)     { { date:old    , bid:1, ask:2 } }
+    let(:new_price)     { { date:new    , bid:1, ask:2 } }
     
     context "with an empty price list" do
 
