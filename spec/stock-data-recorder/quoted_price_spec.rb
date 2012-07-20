@@ -6,26 +6,17 @@ describe "Stock::Data::QuotedPrice" do
   let(:ask_price) { 100.0 }
   let(:bid_price) { 100.0 }
   let(:valid_data) { {date:price_date, ask:ask_price, bid:bid_price} }  
+  let(:invalid_types) { [1, 1.0, 'one', true, [], (1..10)] }
+
   subject { Stock::Data::QuotedPrice.new(valid_data) }
 
   describe ".new" do
 
     shared_examples "a set of quoted prices" do
-      it "includes the date associated with the quote" do
-        subject.date.should == price_date
-      end      
-     
-      it "includes the bid price" do
-        subject.bid.should == bid_price
-      end
-
-      it "includes the asking price" do
-        subject.ask.should == ask_price
-      end                          
-
-      it "calculates spread between the two prices" do
-        subject.spread.should == ask_price - bid_price
-      end                
+      its(:date) { should == price_date }
+      its(:bid) { should == bid_price }
+      its(:ask) { should == ask_price }
+      its(:spread) { should == ask_price - bid_price }      
     end            
   
     context "with valid hash data" do
@@ -36,7 +27,7 @@ describe "Stock::Data::QuotedPrice" do
       end
   
       context "with different prices" do
-        let(:bid_price) { 100.0 }
+        let(:bid_price) { 80.0 }
         it_behaves_like "a set of quoted prices"
       end
     
@@ -64,29 +55,24 @@ describe "Stock::Data::QuotedPrice" do
       it_behaves_like "a set of quoted prices"      
     end
     
-    context "with the wrong data types in the hash for price" do
-      let(:invalid_types) { ['one', true, [], {}] }
-      let(:invalid_data) { valid_data }
-
-      it "throws an ArgumentError for ask price" do
-        invalid_types.each do |invalid_type|
-          invalid_data[:ask] = invalid_type
-          expect { Stock::Data::QuotedPrice.new(invalid_data) }.
-            to raise_error ArgumentError, 'Price must be a Fixnum or Float'      
-        end
+    context "with the wrong data types for price" do
+      shared_examples "invalid price data" do |attribute|
+        let(:invalid_data) { valid_data }
+        let(:invalid_numbers) { ['one', true, [], (1..10)] }
+        it "throws an ArgumentError for #{attribute} price" do
+          invalid_numbers.each do |invalid_type|
+            invalid_data[attribute] = invalid_type
+            expect { Stock::Data::QuotedPrice.new(invalid_data) }.
+              to raise_error ArgumentError, 'Price must be a Fixnum or Float'      
+          end
+        end        
       end
-
-      it "throws an ArgumentError for bid price" do
-        invalid_types.each do |invalid_type|
-          invalid_data[:bid] = invalid_type
-          expect { Stock::Data::QuotedPrice.new(invalid_data) }.
-            to raise_error ArgumentError, 'Price must be a Fixnum or Float'      
-        end
-      end      
+      
+      it_behaves_like "invalid price data", :ask
+      it_behaves_like "invalid price data", :bid      
     end  
     
     context "without a valid DateTime for the quoted prices" do
-      let(:invalid_types) { [1, 1.0, '1', true, [1]] }
       let(:invalid_data) { valid_data }
       
       it "throws an ArgumentError" do
@@ -99,8 +85,6 @@ describe "Stock::Data::QuotedPrice" do
     end    
 
     context "without a hash argument" do    
-      let(:invalid_types) { [1, 1.0, '1', true, [1]] }
-    
       it "throws an ArgumentError" do
         invalid_types.each do |invalid_type|
           expect { Stock::Data::QuotedPrice.new(invalid_type) }.
@@ -114,11 +98,6 @@ describe "Stock::Data::QuotedPrice" do
       let(:no_ask)  { {date:price_date, bid:bid_price} }
       let(:no_bid)  { {date:price_date, ask:ask_price} }
     
-      it "throws an ArgumentError with an empty hash" do
-        expect { Stock::Data::QuotedPrice.new({}) }.
-          to raise_error, ArgumentError
-      end
-
       it "throws an ArgumentError without a date" do
         expect { Stock::Data::QuotedPrice.new(no_date) }.
           to raise_error, ArgumentError
