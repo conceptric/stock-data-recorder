@@ -45,10 +45,12 @@ describe Stock::Data::QuotedPrice do
   
   describe "are comparable" do
                                      
-    let(:past) { Stock::Data::QuotedPrice.new(DateTime.new(2012,01,01),
-                          ask_price, bid_price) } 
-    let(:recent) { Stock::Data::QuotedPrice.new(
-      DateTime.new(2012,06,01), ask_price, bid_price) }
+    let(:past) { 
+      Stock::Data::QuotedPrice.new(
+        DateTime.new(2012,01,01), ask_price, bid_price) } 
+    let(:recent) { 
+      Stock::Data::QuotedPrice.new(
+        DateTime.new(2012,06,01), ask_price, bid_price) }
         
     it "can tell when two prices are of the same date" do
       same = Stock::Data::QuotedPrice.new(price_date, ask_price, bid_price)
