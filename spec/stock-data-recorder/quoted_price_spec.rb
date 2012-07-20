@@ -63,6 +63,40 @@ describe "Stock::Data::QuotedPrice" do
       
       it_behaves_like "a set of quoted prices"      
     end
+    
+    context "with the wrong data types in the hash for price" do
+      let(:invalid_types) { ['one', true, [], {}] }
+      let(:invalid_data) { valid_data }
+
+      it "throws an ArgumentError for ask price" do
+        invalid_types.each do |invalid_type|
+          invalid_data[:ask] = invalid_type
+          expect { Stock::Data::QuotedPrice.new(invalid_data) }.
+            to raise_error ArgumentError, 'Price must be a Fixnum or Float'      
+        end
+      end
+
+      it "throws an ArgumentError for bid price" do
+        invalid_types.each do |invalid_type|
+          invalid_data[:bid] = invalid_type
+          expect { Stock::Data::QuotedPrice.new(invalid_data) }.
+            to raise_error ArgumentError, 'Price must be a Fixnum or Float'      
+        end
+      end      
+    end  
+    
+    context "without a valid DateTime for the quoted prices" do
+      let(:invalid_types) { [1, 1.0, '1', true, [1]] }
+      let(:invalid_data) { valid_data }
+      
+      it "throws an ArgumentError" do
+        invalid_types.each do |invalid_type|
+          invalid_data[:date] = invalid_type
+          expect { Stock::Data::QuotedPrice.new(invalid_data) }.
+            to raise_error ArgumentError, 'Date must be a Ruby DateTime object'      
+        end
+      end
+    end    
 
     context "without a hash argument" do    
       let(:invalid_types) { [1, 1.0, '1', true, [1]] }

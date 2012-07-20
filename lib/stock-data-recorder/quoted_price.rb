@@ -7,9 +7,9 @@ module Stock
 
       def initialize(args)                              
         validate(args)
-        @date = args[:date]
-        @bid = args[:bid]
-        @ask = args[:ask]
+        @date = validate_datetime(args[:date])
+        @bid = validate_number(args[:bid])
+        @ask = validate_number(args[:ask])
       end
       
       def <=>(another)
@@ -21,6 +21,21 @@ module Stock
       end                                           
       
       private 
+                           
+      def validate_datetime(dt)
+        if dt.class != DateTime
+          raise ArgumentError, 'Date must be a Ruby DateTime object'
+        end
+        dt
+      end                      
+      
+      def validate_number(number)                         
+        test = true
+        test = false if number.class == Float
+        test = false if number.class == Fixnum
+        raise ArgumentError, 'Price must be a Fixnum or Float' if test
+        number
+      end
 
       def validate(args)
         if args.class != Hash
