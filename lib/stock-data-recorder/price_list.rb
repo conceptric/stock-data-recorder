@@ -10,10 +10,10 @@ module Stock
         @prices = []
       end           
       
-      def <<(price)     
-        @prices << price if price.class == Stock::Data::QuotedPrice
+      def <<(price_data)     
+        @prices << QuotedPrice.new(price_data)
       end
-      
+            
     end
   end
 end

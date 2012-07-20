@@ -5,10 +5,16 @@ module Stock
       
       attr_reader :date, :bid, :ask
 
-      def initialize(date, ask, bid)
-        @date = date
-        @bid = bid
-        @ask = ask
+      def initialize(args)                              
+        if args.class != Hash
+          raise ArgumentError, 'Price data must be a hash'
+        end
+        if args.empty? || !args[:date] || !args[:ask] || !args[:bid]
+          raise ArgumentError, 'The price data are incomplete'
+        end
+        @date = args[:date]
+        @bid = args[:bid]
+        @ask = args[:ask]
       end
       
       def <=>(another)

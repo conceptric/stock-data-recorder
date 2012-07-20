@@ -14,10 +14,7 @@ module Stock
       end
 
       def add_price(price_data)
-        @prices << QuotedPrice.new(
-                    price_data[:date], 
-                    price_data[:ask],
-                    price_data[:bid])
+        @prices << price_data
       end
 
       def has_prices?
