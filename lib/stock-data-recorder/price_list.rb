@@ -10,7 +10,7 @@ module Stock
         @prices = []
       end           
       
-      def <<(price_data)     
+      def <<(price_data)                     
         @prices << QuotedPrice.new(price_data)
       end
             

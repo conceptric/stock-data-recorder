@@ -24,5 +24,8 @@ describe Stock::Data::PriceList do
     subject << past
     subject.sort.first.date.should == past[:date]
   end
-    
+  
+  it "raises an Argument error if invalid price data are provided" do
+    expect { subject << {} }.to raise_error ArgumentError
+  end  
 end
