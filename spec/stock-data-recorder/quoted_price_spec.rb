@@ -43,7 +43,7 @@ describe Stock::Data::QuotedPrice do
     it_behaves_like "a set of quoted prices"
   end
   
-  describe ".comparable" do
+  describe "are comparable" do
                                      
     let(:past) { Stock::Data::QuotedPrice.new(DateTime.new(2012,01,01),
                           ask_price, bid_price) } 
@@ -61,11 +61,6 @@ describe Stock::Data::QuotedPrice do
     
     it "can tell when one price is older than another" do
       subject.should < recent      
-    end
-    
-    it "can be sorted from oldest to most recent" do
-      unsorted = [recent, past]
-      unsorted.sort.should == [past, recent]
     end
     
   end

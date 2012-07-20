@@ -1,12 +1,16 @@
 module Stock
   module Data
     class QuotedItem    
-      attr_reader :ticker, :prices
+
+      extend Forwardable
+      def_delegator :@prices, :each, :each_price
+            
+      attr_reader :ticker
 
       def initialize(ticker) 
         validate_ticker(ticker)
         @ticker = ticker    
-        @prices = []
+        @prices = PriceList.new
       end
 
       def add_price(price_data)
@@ -14,9 +18,16 @@ module Stock
                     price_data[:date], 
                     price_data[:ask],
                     price_data[:bid])
-        @prices = @prices.sort.reverse
       end
 
+      def has_prices?
+        !@prices.empty?
+      end        
+      
+      def number_of_prices
+        @prices.size
+      end           
+      
       private
 
       def validate_ticker(ticker)

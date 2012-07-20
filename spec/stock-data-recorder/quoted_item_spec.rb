@@ -64,21 +64,23 @@ describe Stock::Data::QuotedItem do
     context "with an empty price list" do
 
       it "has no prices" do
-        subject.prices.size.should == 0
+        subject.has_prices?.should be_false
       end                       
     
       it "adds price data based on a hash" do  
         subject.add_price(old_price)
-        subject.prices.size.should == 1
-        price = subject.prices.first        
-        price.bid == 1
-        price.ask == 2
+        subject.number_of_prices.should == 1
+        subject.each_price do |price|       
+          price.bid == 1
+          price.ask == 2
+        end
       end
 
       it "the price can tell me the spread" do              
         subject.add_price(old_price)
-        price = subject.prices.first
-        price.spread == 1
+        subject.each_price do |price|
+          price.spread == 1
+        end
       end
 
     end
@@ -90,19 +92,14 @@ describe Stock::Data::QuotedItem do
       end
       
       it "has a single price" do
-        subject.prices.size.should == 1                    
+        subject.number_of_prices.should == 1                    
       end                                                            
       
       it "adds a second price" do
         subject.add_price(old_price)
-        subject.prices.size.should == 2
+        subject.number_of_prices.should == 2
       end                                     
       
-      it "the most recent prices are first" do       
-        subject.add_price(new_price)
-        subject.prices.first.date.should be > subject.prices.last.date
-      end
-   
     end           
 
   end
