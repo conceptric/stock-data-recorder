@@ -1,6 +1,7 @@
 require "stock-data-recorder/version"
 require "stock-data-recorder/quoted_item"
 require "stock-data-recorder/quoted_price"
+require "stock-data-recorder/price_list"
 
 module Stock
   module Data
