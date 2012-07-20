@@ -11,7 +11,6 @@ describe "Stock::Data::QuotedPrice" do
   describe ".new" do
   
     context "with valid hash data" do
-
       it "returns the currency in which the prices are quoted"
   
       shared_examples "a set of quoted prices" do
@@ -43,8 +42,7 @@ describe "Stock::Data::QuotedPrice" do
     
     end
 
-    context "without a hash argument" do
-    
+    context "without a hash argument" do    
       let(:invalid_types) { [1, 1.0, '1', true, [1]] }
     
       it "throws an ArgumentError" do
@@ -56,7 +54,6 @@ describe "Stock::Data::QuotedPrice" do
     end
   
     context "with invalid hash data" do
-
       let(:no_date) { {ask:ask_price, bid:bid_price} }
       let(:no_ask)  { {date:price_date, bid:bid_price} }
       let(:no_bid)  { {date:price_date, ask:ask_price} }
@@ -80,8 +77,6 @@ describe "Stock::Data::QuotedPrice" do
         expect { Stock::Data::QuotedPrice.new(no_bid) }.
           to raise_error, ArgumentError
       end
-
-
     end
   
   end
