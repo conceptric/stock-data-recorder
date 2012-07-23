@@ -16,9 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = Stock::Data::Recorder::VERSION 
   
   gem.add_development_dependency('rspec')
-  gem.add_development_dependency('vcr')
-  gem.add_development_dependency('webmock')
   gem.add_dependency('rake')
-  gem.add_dependency('json')
-  
+  gem.add_dependency('json')  
 end

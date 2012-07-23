@@ -2,7 +2,7 @@
 
 I like to keep track of my stock portfolio, but most historical data provides the Mid price. I want the Bid price for a more realistic estimate of the portfolio value.
 
-That's why this simple project was created to regularly request, and store Bid and Ask prices for the specified stocks. I'm using Yahoo! Query Language to obtain these data from Yahoo! Finance.
+That's why this simple project was created to regularly request, and store Bid and Ask prices for the specified stocks.
 
 # Installation #
 
