@@ -2,14 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Stock::Data::PriceList do
   
-  subject { Stock::Data::PriceList.new }
-  
   let(:past_date)   { DateTime.new(2012,01,01) }
   let(:recent_date) { DateTime.new(2012,06,01) }
-  let(:past)   { {date:past_date, ask:2, bid:1} } 
-  let(:recent) { {date:recent_date, ask:3, bid:2.5} }
+  let(:past)        { {date:past_date, ask:2, bid:1} } 
+  let(:recent)      { {date:recent_date, ask:3, bid:2.5} }
+
+  subject { Stock::Data::PriceList.new }
     
-  it { should be_empty }
+  its(:empty?) { should be_true }
+  its(:size) { should == 0 }
 
   describe "<<" do
     
