@@ -20,8 +20,6 @@ module Stock
         ask - bid
       end                                           
       
-      private 
-                           
       def validate_datetime(dt)
         if dt.class != DateTime
           raise ArgumentError, 'Date must be a Ruby DateTime object'
@@ -45,7 +43,9 @@ module Stock
           raise ArgumentError, 'The price data are incomplete'
         end        
       end
-      
+
+      private :validate_datetime, :validate_number, :validate
+                                 
     end    
   end  
 end

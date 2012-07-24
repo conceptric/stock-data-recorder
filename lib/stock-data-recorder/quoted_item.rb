@@ -25,8 +25,6 @@ module Stock
         @prices.size
       end           
       
-      private
-
       def validate_ticker(ticker)
         raise ArgumentError, "Ticker must be a valid string", 
           caller unless ticker.class == String        
@@ -35,6 +33,9 @@ module Stock
         raise ArgumentError, "You must provide a market ID", 
           caller if ticker !~ /\.[a-zA-Z]+$/
       end  
+
+      private :validate_ticker
+
     end         
   end  
 end
