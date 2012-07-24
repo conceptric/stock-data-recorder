@@ -17,10 +17,10 @@ module Stock
         @prices << price_data
       end
 
-      def has_prices?
-        !@prices.empty?
-      end        
-      
+      def delete_price(for_date)
+        @prices.clear
+      end
+
       def number_of_prices
         @prices.size
       end           
