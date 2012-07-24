@@ -8,7 +8,8 @@ describe Stock::Data::QuotedItem do
     
     context "with a valid ticker string" do      
       it { should be_instance_of Stock::Data::QuotedItem }
-      its(:ticker) { should == "BP.L" }        
+      its(:ticker) { should == "BP.L" }
+      its(:number_of_prices) { should == 0 }        
     end
   
     context "with no argument" do
