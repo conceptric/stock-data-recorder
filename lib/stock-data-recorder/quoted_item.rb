@@ -25,6 +25,14 @@ module Stock
         @prices.size
       end           
       
+      def to_csv
+        output = []
+        @prices.each do |price|
+          output << "#{ticker},#{price.to_csv}"
+        end                           
+        output.join("\n")
+      end       
+      
       def validate_ticker(ticker)
         raise ArgumentError, "Ticker must be a valid string", 
           caller unless ticker.class == String        

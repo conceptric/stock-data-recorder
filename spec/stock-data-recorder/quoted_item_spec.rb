@@ -66,6 +66,27 @@ describe Stock::Data::QuotedItem do
       end                                         
     
     end
+    
+  end
+
+  describe ".to_csv" do
+
+    let(:the_date)  { DateTime.new(2012,06,1) }
+    let(:the_price) { { date:the_date, bid:1, ask:2 } }
+
+    before(:each) do
+      2.times { subject.add_price(the_price) }      
+    end         
+    
+    it "returns a line for each price" do
+      subject.to_csv.split(/\n/).size.should eql 2
+    end
+
+    it "each line should begin with the ticker" do
+      subject.to_csv.split(/\n/).each do |line|      
+        line.should start_with "BP.L"
+      end
+    end
 
   end
   

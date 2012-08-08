@@ -20,6 +20,10 @@ module Stock
         ask - bid
       end                                           
       
+      def to_csv
+        "#{date},#{ask},#{bid}"
+      end
+      
       def validate_datetime(dt)
         if dt.class != DateTime
           raise ArgumentError, 'Date must be a Ruby DateTime object'

@@ -20,7 +20,6 @@ describe "Stock::Data::QuotedPrice" do
     end            
   
     context "with valid hash data" do
-      it "returns the currency in which the prices are quoted"
   
       context "with matching prices" do
         it_behaves_like "a set of quoted prices"
@@ -139,5 +138,16 @@ describe "Stock::Data::QuotedPrice" do
     end
   
   end
+  
+  describe ".to_csv" do
+    
+    let(:ask_price) { 110.00 }
+    
+    it "returns the price data as a comma delimited string" do
+      subject.to_csv.should eql "#{price_date},#{ask_price},#{bid_price}"
+    end
+    
+  end
+  
   
 end
