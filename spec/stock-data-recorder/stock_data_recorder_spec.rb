@@ -51,8 +51,16 @@ describe Stock::Data::Recorder do
     context "with tickers defined" do
       it "returns a StringIO containing the tickers" do
         Stock::Data::Recorder.set_tickers(tickers)
-        subject.string.should eql tickers.join(',')
-      end    
+        tickers.each do |ticker|
+          subject.string.should include ticker
+        end
+      end                                     
+      
+      it "returns a StringIO with a single line for each ticker" do
+        Stock::Data::Recorder.set_tickers(tickers)
+        subject.rewind
+        subject.readlines.size.should eql 2
+      end
     end
     
   end
