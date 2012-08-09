@@ -4,9 +4,13 @@ I like to keep track of my stock portfolio, but most historical data provides th
 
 That's why this simple project was created to regularly request, and store Bid and Ask prices for the specified stocks.
 
+It's not a gem anymore because it was always going to have to be a server based application with a Web API due to the continuous logging part of its functionality. 
+
+The API might be based on Sinatra or Rails, but I'm going to implement it all using JRuby and the JVM.
+
 # Installation #
 
-You're welcome to try the code for yourself (point your Gemfile at this repo, or better yet, create a fork), but this is a work in progress, so there are no guarantees! Any financial losses you incurr from my little project are your own problem.                               
+You're welcome to try the code for yourself, but this is a work in progress, so there are no guarantees! Any financial losses you incurr from my little project are your own problem.                               
 
 ## Note on Patches/Pull Requests
  
