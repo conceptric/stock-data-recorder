@@ -51,7 +51,8 @@ describe Stock::Data::Recorder do
     let(:output) { StringIO.new }
 
     before(:each) do
-      CSV.stub(:open).and_return(output)      
+      CSV.should_receive(:open).once.and_return(output)      
+      output.should_receive(:close).once
     end         
     
     context "with no tickers defined" do

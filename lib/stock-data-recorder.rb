@@ -1,6 +1,7 @@
 require "stock-data-recorder/quoted_item"
 require "stock-data-recorder/quoted_price"
 require "stock-data-recorder/price_list"
+
 require 'yahoo-api'
 require 'csv'
 
@@ -23,9 +24,14 @@ module Stock
         end
       end    
       
-      def write_to_csv                                     
-        get.each do |line|
-          CSV.open('./test.csv') << CSV::Row.new(line.keys, line.values)
+      def write_to_csv   
+        output_file = CSV.open('./test.csv', 'ab') 
+        begin                                  
+          get.each do |line|
+            output_file << CSV::Row.new(line.keys, line.values)
+          end                                     
+        ensure
+          output_file.close unless output_file.nil?
         end
       end
             
