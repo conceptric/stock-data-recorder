@@ -2,10 +2,34 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Stock::Data::Recorder do
 
-  let(:tickers) { %w(BP.L GSK.L) }        
+  let(:tickers) { %w(BP.L GSK.L) }
+  let(:bp) { { quoted_at: '2012-06-01', 
+               symbol: 'BP.L', 
+               Ask: 110.00, 
+               Bid: 100.00 } }
+  let(:gsk) { { quoted_at: '2012-06-01', 
+                symbol: 'GSK.L', 
+                Ask: 110.00, 
+                Bid: 100.00 } }
+  let(:yahoo_quotes) { [bp, gsk] }        
+
+  describe ".new" do
+    it "returns a new instance with an array of ticker strings" do        
+      Stock::Data::Recorder.new(tickers).should be_true
+    end    
+
+    it "returns a new instance with a blank array" do        
+      Stock::Data::Recorder.new([]).should be_true
+    end    
+
+    it "returns ArgumentError without an argument" do        
+      expect { Stock::Data::Recorder.new() }.to raise_error ArgumentError
+    end    
+  end
   
-  describe ".get" do                            
-    
+  describe ".get" do
+    use_vcr_cassette "yahoo-api-query", :record => :new_episodes  
+
     context "with no tickers defined" do
       it "returns an empty collection" do        
         Stock::Data::Recorder.new([]).get.should be_empty
@@ -20,11 +44,11 @@ describe Stock::Data::Recorder do
       end                 
 
       it "the first entry for the first ticker" do
-        subject.get.first.ticker.should eql tickers.first
+        subject.get.first['symbol'].should eql tickers.first
       end      
 
       it "the last entry for the last ticker" do
-        subject.get.last.ticker.should eql tickers.last
+        subject.get.last['symbol'].should eql tickers.last
       end      
     end
   

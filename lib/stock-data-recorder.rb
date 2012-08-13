@@ -1,6 +1,7 @@
 require "stock-data-recorder/quoted_item"
 require "stock-data-recorder/quoted_price"
 require "stock-data-recorder/price_list"
+require 'yahoo-api'
 
 module Stock
   module Data
@@ -11,15 +12,12 @@ module Stock
         @tickers = tickers        
       end
                       
-      def self.set_tickers(tickers)
-      end
-      
       def get
-        quoted_items = []
-        @tickers.each do |ticker| 
-          quoted_items << Stock::Data::QuotedItem.new(ticker)
-        end                
-        quoted_items
+        begin
+          return Yahoo::Api::Finance::Query.new(@tickers).quotes
+        rescue ArgumentError
+          return []
+        end
       end    
       
       def write_to(io_string)       
