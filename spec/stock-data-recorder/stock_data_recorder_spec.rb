@@ -3,15 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Stock::Data::Recorder do
 
   let(:tickers) { %w(BP.L GSK.L) }
-  let(:bp) { { quoted_at: '2012-06-01', 
-               symbol: 'BP.L', 
-               Ask: 110.00, 
-               Bid: 100.00 } }
-  let(:gsk) { { quoted_at: '2012-06-01', 
-                symbol: 'GSK.L', 
-                Ask: 110.00, 
-                Bid: 100.00 } }
-  let(:yahoo_quotes) { [bp, gsk] }        
+  use_vcr_cassette "yahoo-api-query", :record => :new_episodes  
 
   describe ".new" do
     it "returns a new instance with an array of ticker strings" do        
@@ -28,7 +20,6 @@ describe Stock::Data::Recorder do
   end
   
   describe ".get" do
-    use_vcr_cassette "yahoo-api-query", :record => :new_episodes  
 
     context "with no tickers defined" do
       it "returns an empty collection" do        

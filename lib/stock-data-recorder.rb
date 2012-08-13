@@ -21,7 +21,7 @@ module Stock
       end    
       
       def write_to(io_string)       
-        io_string << @tickers.join("\n")
+        io_string << get.join("\n")
         io_string
       end
     end
