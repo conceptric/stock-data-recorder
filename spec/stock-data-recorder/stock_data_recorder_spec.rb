@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'csv'
 
 describe Stock::Data::Recorder do
 
@@ -43,7 +44,67 @@ describe Stock::Data::Recorder do
       end      
     end
   
-  end                                                
+  end                                    
+  
+  describe ".write_to_csv" do
+
+    let(:output) { StringIO.new }
+
+    before(:each) do
+      CSV.stub(:open).and_return(output)      
+    end         
+    
+    context "with no tickers defined" do
+      it "returns an writes nothing" do
+        recorder = Stock::Data::Recorder.new([])
+        recorder.write_to_csv
+        output.string.should eql ""
+      end                                                   
+    end
+    
+    context "with tickers defined" do
+      subject { Stock::Data::Recorder.new(tickers) }
+
+      let(:symbol_regex) { '([A-Za-z]+\.[A-Za-z]+)' }
+      let(:price_regex) { '([0-9]+\.[0-9]{2})' }
+      let(:date_regex) { '(\d{4}(-{1}\d{2}){2})' }
+      let(:time_regex) { 'T((\d{2}:{1}){2}(\d{2}){1})Z' }
+      let(:output_regex) {
+        symbol_regex + "," + 
+        price_regex + "," + 
+        price_regex + "," +
+        date_regex + time_regex
+      }
+
+      it "writes output with a symbol value" do
+        subject.write_to_csv
+        output.string.should =~ Regexp.new(symbol_regex)
+      end                                                   
+
+      it "writes output with a price value" do
+        subject.write_to_csv
+        output.string.should =~ Regexp.new(price_regex)
+      end                                                   
+
+      it "writes output with a datetime value" do
+        subject.write_to_csv
+        output.string.should =~ Regexp.new(date_regex)
+        output.string.should =~ Regexp.new(time_regex)
+      end        
+      
+      it "writes output as comma-delimited" do        
+        subject.write_to_csv
+        output.string.should =~ Regexp.new(output_regex)
+      end                                           
+
+      it "writes output with a single line for each ticker" do
+        subject.write_to_csv
+        output.rewind
+        output.readlines.size.should eql tickers.size
+      end                                                 
+    end
+    
+  end            
 
   describe ".write_to" do
     
@@ -55,7 +116,8 @@ describe Stock::Data::Recorder do
     end
 
     context "with tickers defined" do
-      subject { Stock::Data::Recorder.new(tickers).write_to(StringIO.new) }
+      subject { 
+        Stock::Data::Recorder.new(tickers).write_to(StringIO.new) }
 
       it "returns a StringIO containing the tickers" do
         tickers.each do |ticker|
@@ -66,7 +128,7 @@ describe Stock::Data::Recorder do
       it "returns a StringIO with a single line for each ticker" do
         subject.rewind
         subject.readlines.size.should eql 2
-      end
+      end                                                 
     end
     
   end
