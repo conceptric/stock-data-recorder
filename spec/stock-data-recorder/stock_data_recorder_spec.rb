@@ -49,8 +49,8 @@ describe Stock::Data::Recorder do
     
     context "with no tickers defined" do    
       it "returns an empty StringIO" do
-        recorder = Stock::Data::Recorder.new([]).write_to(StringIO.new)
-        recorder.string.should eql ""
+        record = Stock::Data::Recorder.new([]).write_to(StringIO.new)
+        record.string.should eql ""
       end                                             
     end
 

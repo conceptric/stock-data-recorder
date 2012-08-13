@@ -20,9 +20,9 @@ module Stock
         end
       end    
       
-      def write_to(io_string)       
-        io_string << get.join("\n")
-        io_string
+      def write_to(output)       
+        output << get.join("\n")
+        output
       end
     end
   end
