@@ -105,32 +105,5 @@ describe Stock::Data::Recorder do
     end
     
   end            
-
-  describe ".write_to" do
-    
-    context "with no tickers defined" do    
-      it "returns an empty StringIO" do
-        record = Stock::Data::Recorder.new([]).write_to(StringIO.new)
-        record.string.should eql ""
-      end                                             
-    end
-
-    context "with tickers defined" do
-      subject { 
-        Stock::Data::Recorder.new(tickers).write_to(StringIO.new) }
-
-      it "returns a StringIO containing the tickers" do
-        tickers.each do |ticker|
-          subject.string.should include ticker
-        end
-      end                                     
-      
-      it "returns a StringIO with a single line for each ticker" do
-        subject.rewind
-        subject.readlines.size.should eql 2
-      end                                                 
-    end
-    
-  end
   
 end

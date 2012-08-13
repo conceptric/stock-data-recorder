@@ -6,7 +6,9 @@ require 'csv'
 
 module Stock
   module Data
+    
     class Recorder
+    
       @tickers = []
 
       def initialize(tickers)
@@ -26,11 +28,8 @@ module Stock
           CSV.open('./test.csv') << CSV::Row.new(line.keys, line.values)
         end
       end
-      
-      def write_to(output)       
-        output << get.join("\n")
-        output
-      end
+            
     end
+    
   end
 end
