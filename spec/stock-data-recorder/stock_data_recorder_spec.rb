@@ -56,8 +56,6 @@ describe Stock::Data::Recorder do
 
   describe ".write_to" do
     
-    subject { Stock::Data::Recorder.new(tickers).write_to(StringIO.new) }
-    
     context "with no tickers defined" do    
       it "returns an empty StringIO" do
         recorder = Stock::Data::Recorder.new([]).write_to(StringIO.new)
@@ -66,6 +64,8 @@ describe Stock::Data::Recorder do
     end
 
     context "with tickers defined" do
+      subject { Stock::Data::Recorder.new(tickers).write_to(StringIO.new) }
+
       it "returns a StringIO containing the tickers" do
         tickers.each do |ticker|
           subject.string.should include ticker
