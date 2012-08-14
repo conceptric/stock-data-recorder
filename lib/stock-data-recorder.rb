@@ -10,7 +10,8 @@ module Stock
     
     class Recorder
     
-      @tickers = []
+      @tickers = []     
+      TARGETFILE = './quotes.csv'
 
       def initialize(tickers)
         @tickers = tickers        
@@ -25,7 +26,7 @@ module Stock
       end    
       
       def write_to_csv   
-        output_file = CSV.open('./test.csv', 'ab') 
+        output_file = CSV.open(TARGETFILE, 'ab') 
         begin                                  
           get.each do |line|
             output_file << CSV::Row.new(line.keys, line.values)
