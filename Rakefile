@@ -19,7 +19,7 @@ end
 
 desc "Poll for stock quotes"
 task :poll_quotes do                          
-  tickers = %w(BP.L GSK.L VOD.L RDSA.L)
+  tickers = %w(BP.L GSK.L VOD.L RDSA.L ULVR.L BLT.L)
   recorder = Stock::Data::Recorder.new(tickers)
   recorder.write_to_csv
   puts "Quotes written for #{tickers}"
