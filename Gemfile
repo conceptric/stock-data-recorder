@@ -1,5 +1,9 @@
 source 'https://rubygems.org'
 
+platforms :jruby do
+  gem "jruby-openssl"
+end
+
 gem "rake"
 gem "json"     
 gem "yahoo-api", :git => "git://github.com/conceptric/yahoo-api.git"
