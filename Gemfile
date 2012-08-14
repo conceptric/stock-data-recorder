@@ -10,3 +10,9 @@ group :development, :test do
   gem "vcr"
   gem "webmock"
 end
+
+group :deployment do 
+  gem 'capistrano', '2.12.0'
+  gem 'rvm', '1.11.3.5'
+  gem 'rvm-capistrano', '1.2.3'
+end
